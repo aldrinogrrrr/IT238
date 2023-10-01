@@ -9,7 +9,8 @@ try:
     print(f"Connected to the server at {server_ip}:{server_port}")
 
     while True:
-        message = input("Enter your message (or 'exit' to quit): ")
+        print("Press <ctrl + x> to terminate the chat")
+        message = input("Enter your message: ")
         client.send(message.encode('utf-8'))
         if message.lower() == 'exit':
             break
