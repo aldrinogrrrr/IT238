@@ -1,5 +1,6 @@
 import socket
 import threading
+import keyboard
 
 
 def handle_client(client_socket):
@@ -12,8 +13,11 @@ def handle_client(client_socket):
 
             print(f"Client User's Message: {data}")
 
-            response = input("Enter your message: ")
+            response = input("Enter your message (or ctrl + x to quit): ")
             client_socket.send(response.encode('utf-8'))
+
+            if keyboard.is_pressed('ctrl') and keyboard.is_pressed('x'):
+                break
 
         except ConnectionResetError:
             print("Client User disconnected")
