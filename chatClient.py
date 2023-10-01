@@ -1,4 +1,5 @@
 import socket
+import keyboard
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_ip = '172.20.10.3'
@@ -9,14 +10,16 @@ try:
     print(f"Connected to the server at {server_ip}:{server_port}")
 
     while True:
-        print("Press <ctrl + x> to terminate the chat")
-        message = input("Enter your message: ")
+        message = input("Enter your message (or ctrl + x to quit): ")
         client.send(message.encode('utf-8'))
         if message.lower() == 'exit':
             break
 
         response = client.recv(1024).decode('utf-8')
         print(f"Server's Response: {response}")
+
+        if keyboard.is_pressed('ctrl') and keyboard.is_pressed('x'):
+            break
 
 except ConnectionRefusedError:
     print(f"Connection to {server_ip}:{server_port} was refused. Make sure the server is running.")
