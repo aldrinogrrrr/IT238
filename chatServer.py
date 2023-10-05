@@ -12,19 +12,18 @@ def handle_client(client_socket):
 
             print(f"Client's Message: {data}")
 
-            # Send a response back to the client
             response = input("Enter your message: ")
             client_socket.send(response.encode('utf-8'))
         except ConnectionResetError:
-            print("Client disconnected abruptly.")
+            print("Client disconnected.")
             break
 
     client_socket.close()
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('0.0.0.0', 9999))  # Bind to all available network interfaces on port 9999
-server.listen(5)  # Listen for up to 5 client connections
+server.bind(('0.0.0.0', 9999))  
+server.listen(5) 
 
 print("Server listening on port 9999")
 
