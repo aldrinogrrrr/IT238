@@ -16,7 +16,7 @@ def listen_for_messages():
     while True:
         data, client_address = server_socket.recvfrom(1024)
         print(f"Received message from {client_address}: {data.decode()}")
-        # Broadcast the message to all connected clients
+        # Broadcast the message to all connected clients except the sender
         for address in client_addresses:
             if address != client_address:
                 server_socket.sendto(data, address)
