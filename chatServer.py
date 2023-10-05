@@ -1,9 +1,9 @@
 import socket
 import threading
-#import keyboard
 
 # Store all connected clients and their names
 connected_clients = {}
+
 
 def handle_client(client_socket, client_name):
     try:
@@ -20,14 +20,12 @@ def handle_client(client_socket, client_name):
                 if name != client_name:
                     socket.send(f"{client_name}: {response}".encode('utf-8'))
 
-            #if keyboard.is_pressed('ctrl') and keyboard.is_pressed('x'):
-                #break
-
     except ConnectionResetError:
         print(f"{client_name} disconnected")
     finally:
         client_socket.close()
         del connected_clients[client_name]
+
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('0.0.0.0', 9999))
