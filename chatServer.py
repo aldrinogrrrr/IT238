@@ -1,7 +1,7 @@
 import socket
 import threading
 
-# 10th
+#11th version
 connected_clients = {}
 
 def handle_client(client_socket, client_address, client_name):
@@ -15,20 +15,15 @@ def handle_client(client_socket, client_address, client_name):
 
             print(f"{client_name}: {data}")
 
+            for name, socket in connected_clients.items():
+                if socket != client_socket:
+                    socket.send(f"{client_name}: {data}".encode('utf-8'))
+
     except ConnectionResetError:
         print(f"{client_name} disconnected")
     finally:
         client_socket.close()
         del connected_clients[client_name]
-
-def send_to_clients():
-    while True:
-        message = input("Server: Enter your message (or ctrl + x to quit): ")
-        if message.lower() == 'exit':
-            break
-
-        for name, socket in connected_clients.items():
-            socket.send(f"Server: {message}".encode('utf-8'))
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('0.0.0.0', 9999))
@@ -44,11 +39,6 @@ while True:
 
         client_handler = threading.Thread(target=handle_client, args=(client_sock, addr, client_name))
         client_handler.start()
-
-        # Start the send_to_clients thread after a client has connected
-        if len(connected_clients) == 1:
-            send_thread = threading.Thread(target=send_to_clients)
-            send_thread.start()
     except KeyboardInterrupt:
         print("Terminated by the Server User")
         break

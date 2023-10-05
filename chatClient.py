@@ -1,7 +1,7 @@
 import socket
 import keyboard
 
-#updated code for client side
+#11th version
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_ip = '192.168.1.35'
 server_port = 9999
@@ -9,9 +9,6 @@ server_port = 9999
 try:
     client.connect((server_ip, server_port))
     print(f"Connected to the server at {server_ip}:{server_port}")
-
-    client_name = input("Enter your name: ")
-    client.send(client_name.encode('utf-8'))
 
     while True:
         message = input("Enter your message (or ctrl + x to quit): ")
