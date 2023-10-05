@@ -1,7 +1,7 @@
 import socket
 import threading
 
-# 9th
+# 10th
 connected_clients = {}
 
 def handle_client(client_socket, client_address, client_name):
@@ -40,4 +40,19 @@ while True:
     try:
         client_sock, addr = server.accept()
         client_name = f"Client{len(connected_clients) + 1}"
-        connected_clients[
+        connected_clients[client_name] = client_sock
+
+        client_handler = threading.Thread(target=handle_client, args=(client_sock, addr, client_name))
+        client_handler.start()
+
+        # Start the send_to_clients thread after a client has connected
+        if len(connected_clients) == 1:
+            send_thread = threading.Thread(target=send_to_clients)
+            send_thread.start()
+    except KeyboardInterrupt:
+        print("Terminated by the Server User")
+        break
+    except Exception as e:
+        print(f"Error has occurred: {e}")
+
+server.close()
