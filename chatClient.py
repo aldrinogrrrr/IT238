@@ -26,5 +26,5 @@ except ConnectionRefusedError:
 except Exception as e:
     print(f"An error occurred: {e}")
 
-# Close the client socket
+
 client.close()
