@@ -1,17 +1,30 @@
 import socket
 
-# Define the server address and port
-SERVER_HOST = 'localhost'
-SERVER_PORT = 12345
 
-# Create a UDP socket
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_ip = '172.20.10.3'
+server_port = 9999
 
-while True:
-    message = input("Enter a message to send (or 'q' to quit): ")
-    if message.lower() == 'q':
-        break
-    client_socket.sendto(message.encode(), (SERVER_HOST, SERVER_PORT))
 
-# Close the socket when done
-client_socket.close()
+try:
+    client.connect((server_ip, server_port))
+    print(f"Connected to the server at {server_ip}:{server_port}")
+
+    while True:
+        message = input("Enter your message (or 'exit' to quit): ")
+
+        client.send(message.encode('utf-8'))
+
+        if message.lower() == 'exit':
+            break
+
+        response = client.recv(1024).decode('utf-8')
+        print(f"Server's Response: {response}")
+
+except ConnectionRefusedError:
+    print(f"Connection to {server_ip}:{server_port} was refused. Make sure the server is running.")
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+# Close the client socket
+client.close()

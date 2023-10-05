@@ -1,45 +1,45 @@
 import socket
 import threading
 
-# Define the server address and port
-SERVER_HOST = '0.0.0.0'
-SERVER_PORT = 12345
 
-# Create a UDP socket
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server_socket.bind((SERVER_HOST, SERVER_PORT))
-
-# Store client addresses
-client_addresses = set()
-
-def listen_for_messages():
+def handle_client(client_socket):
     while True:
-        data, client_address = server_socket.recvfrom(1024)
-        print(f"Received message from {client_address}: {data.decode()}")
+        try:
 
-def broadcast_message():
-    while True:
-        message = input("Enter message to broadcast: ")
-        for client_address in client_addresses:
-            server_socket.sendto(message.encode(), client_address)
+            data = client_socket.recv(1024).decode('utf-8')
+            if not data:
+                break
 
-if __name__ == "__main__":
-    print(f"Server is listening on {SERVER_HOST}:{SERVER_PORT}")
+            print(f"Received from client: {data}")
 
-    # Start a thread to listen for incoming messages
-    message_listener_thread = threading.Thread(target=listen_for_messages)
-    message_listener_thread.daemon = True
-    message_listener_thread.start()
+            # Send a response back to the client
+            response = input("Enter your response: ")
+            client_socket.send(response.encode('utf-8'))
+        except ConnectionResetError:
+            print("Client disconnected abruptly.")
+            break
 
-    # Start a thread to broadcast messages
-    broadcast_thread = threading.Thread(target=broadcast_message)
-    broadcast_thread.daemon = True
-    broadcast_thread.start()
+    client_socket.close()
 
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('0.0.0.0', 9999))  # Bind to all available network interfaces on port 9999
+server.listen(5)  # Listen for up to 5 client connections
+
+print("Server listening on port 9999")
+
+
+while True:
     try:
-        while True:
-            client_data, client_address = server_socket.recvfrom(1024)
-            client_addresses.add(client_address)
+        client_sock, addr = server.accept()
+        print(f"Accepted connection from {addr[0]}:{addr[1]}")
+
+        client_handler = threading.Thread(target=handle_client, args=(client_sock,))
+        client_handler.start()
     except KeyboardInterrupt:
-        print("Server shutting down.")
-        server_socket.close()
+        print("Server terminated by the user.")
+        break
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+server.close()
