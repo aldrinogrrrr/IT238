@@ -11,7 +11,7 @@ try:
     print(f"Connected to the server at {server_ip}:{server_port}")
 
     while True:
-        message = input("Enter your message (or 'exit' to quit): ")
+        message = input("Enter your message: ")
 
         client.send(message.encode('utf-8'))
 
@@ -19,7 +19,7 @@ try:
             break
 
         response = client.recv(1024).decode('utf-8')
-        print(f"Server's Response: {response}")
+        print(f"Server's Message: {response}")
 
 except ConnectionRefusedError:
     print(f"Connection to {server_ip}:{server_port} was refused. Make sure the server is running.")

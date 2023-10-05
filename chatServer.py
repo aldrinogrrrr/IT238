@@ -10,7 +10,7 @@ def handle_client(client_socket):
             if not data:
                 break
 
-            print(f"Received from client: {data}")
+            print(f"Client's Message: {data}")
 
             # Send a response back to the client
             response = input("Enter your response: ")
