@@ -1,7 +1,7 @@
 import socket
 import keyboard
 
-#updated code
+#updated code for client side
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_ip = '192.168.1.35'
 server_port = 9999

@@ -1,7 +1,7 @@
 import socket
 import threading
 
-# Store all connected clients and their names
+# updated code for server side
 connected_clients = {}
 
 def handle_client(client_socket, client_address):
