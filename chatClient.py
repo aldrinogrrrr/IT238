@@ -2,12 +2,15 @@ import socket
 import keyboard
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_ip = '172.20.10.3'
+server_ip = '192.168.1.35'
 server_port = 9999
 
 try:
     client.connect((server_ip, server_port))
     print(f"Connected to the server at {server_ip}:{server_port}")
+
+    client_name = input("Enter your name: ")
+    client.send(client_name.encode('utf-8'))
 
     while True:
         message = input("Enter your message (or ctrl + x to quit): ")
@@ -16,7 +19,7 @@ try:
             break
 
         response = client.recv(1024).decode('utf-8')
-        print(f"Server's Response: {response}")
+        print(response)
 
         if keyboard.is_pressed('ctrl') and keyboard.is_pressed('x'):
             break
