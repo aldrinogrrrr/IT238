@@ -1,7 +1,7 @@
 import socket
 import threading
 
-# 8TH Version
+# 9th
 connected_clients = {}
 
 def handle_client(client_socket, client_address, client_name):
@@ -36,25 +36,8 @@ server.listen(5)
 
 print("Server listening on port 9999")
 
-# Start the send_to_clients thread
-send_thread = threading.Thread(target=send_to_clients)
-send_thread.start()
-
 while True:
     try:
         client_sock, addr = server.accept()
         client_name = f"Client{len(connected_clients) + 1}"
-        connected_clients[client_name] = client_sock
-
-        client_handler = threading.Thread(target=handle_client, args=(client_sock, addr, client_name))
-        client_handler.start()
-    except KeyboardInterrupt:
-        print("Terminated by the Server User")
-        break
-    except Exception as e:
-        print(f"Error has occurred: {e}")
-
-# Wait for the send_to_clients thread to finish
-send_thread.join()
-
-server.close()
+        connected_clients[
