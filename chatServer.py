@@ -13,7 +13,7 @@ def handle_client(client_socket):
             print(f"Client's Message: {data}")
 
             # Send a response back to the client
-            response = input("Enter your response: ")
+            response = input("Enter your message: ")
             client_socket.send(response.encode('utf-8'))
         except ConnectionResetError:
             print("Client disconnected abruptly.")
