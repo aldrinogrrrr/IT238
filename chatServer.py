@@ -1,7 +1,7 @@
 import socket
 import threading
 
-#11th version
+#13th version
 connected_clients = {}
 
 def handle_client(client_socket, client_address, client_name):
@@ -24,6 +24,15 @@ def handle_client(client_socket, client_address, client_name):
     finally:
         client_socket.close()
         del connected_clients[client_name]
+
+def send_to_clients():
+    while True:
+        message = input("Enter your message (or ctrl + x to quit): ")
+        if message.lower() == 'exit':
+            break
+
+        for name, socket in connected_clients.items():
+            socket.send(f"Server: {message}".encode('utf-8'))
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('0.0.0.0', 9999))
