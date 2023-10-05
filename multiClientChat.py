@@ -1,7 +1,7 @@
 import socket
 
 # Server configuration
-SERVER_IP = '192.168.1.35'  # Replace with your server's IP address
+SERVER_IP = 'your_server_ip'  # Replace with your server's IP address
 SERVER_PORT = 12345
 
 # Create a UDP socket
