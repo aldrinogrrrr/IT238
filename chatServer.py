@@ -1,7 +1,7 @@
 import socket
 import threading
 
-# 4th version
+# 5th version
 connected_clients = {}
 
 def handle_client(client_socket, client_address, client_name):
@@ -14,15 +14,6 @@ def handle_client(client_socket, client_address, client_name):
                 break
 
             print(f"{client_name}: {data}")
-
-            response = input("Enter your message (or ctrl + x to quit): ")
-
-            for name, socket in connected_clients.items():
-                if socket != client_socket:
-                    socket.send(f"{client_name}: {response}".encode('utf-8'))
-
-            if response.lower() == 'exit':
-                break
 
     except ConnectionResetError:
         print(f"{client_name} disconnected")
