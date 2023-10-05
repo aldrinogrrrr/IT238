@@ -2,7 +2,7 @@ import socket
 
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_ip = '172.20.10.3'
+server_ip = '192.168.1.35'
 server_port = 9999
 
 
