@@ -17,5 +17,5 @@ receive_thread = threading.Thread(target=receive_messages)
 receive_thread.start()
 
 while True:
-    message = input("Enter your message: ")
+    message = input()
     client_socket.sendto(message.encode('utf-8'), (server_ip, server_port))
