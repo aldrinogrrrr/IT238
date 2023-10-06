@@ -5,8 +5,8 @@ server_ip = "192.168.1.35"
 server_port = 12345
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-user_name = input("Enter your name: ")
-client_socket.sendto(user_name.encode('utf-8'), (server_ip, server_port))
+userName = input("Enter your name: ")
+client_socket.sendto(userName.encode('utf-8'), (server_ip, server_port))
 
 def receive_messages():
     while True:

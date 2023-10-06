@@ -15,14 +15,14 @@ def broadcast_msg(msg, sender):
         server_socket.sendto(chat_msg.encode('utf-8'), client_addr)
 
 while True:
-    client_msg, client_address = server_socket.recvfrom(1024)
-    client_msg = client_msg.decode('utf-8')
+    clientName, clientAddress = server_socket.recvfrom(1024)
+    clientName = clientName.decode('utf-8')
 
-    if client_address not in client_dict:
-        client_dict[client_address] = client_msg
-        print(f"'{client_msg}' has joined the chat")
-        welcome_msg = f"{client_msg} joined the chat."
+    if clientAddress not in client_dict:
+        client_dict[clientAddress] = clientName
+        print(f"'{clientName}' has joined the chat")
+        welcome_msg = f"{clientName} joined the chat."
         for addr in client_dict:
             server_socket.sendto(welcome_msg.encode('utf-8'), addr)
     else:
-        broadcast_msg(client_msg, client_dict[client_address])
+        broadcast_msg(clientName, client_dict[clientAddress])
