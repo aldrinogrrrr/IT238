@@ -5,24 +5,24 @@ server_ip = "192.168.1.35"
 server_port = 12345
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_socket.bind((server_ip, server_port))
-client_info = {}
+client_dict = {}
 
-print("The server is operational...")
+print("Server is up and running...")
 
-def broadcast(message, sender_name):
-    chat_message = f"{sender_name}: {message}"
-    for addr in client_info:
-        server_socket.sendto(chat_message.encode('utf-8'), addr)
+def broadcast_msg(msg, sender):
+    chat_msg = f"{sender}: {msg}"
+    for client_addr in client_dict:
+        server_socket.sendto(chat_msg.encode('utf-8'), client_addr)
 
 while True:
-    data, client_address = server_socket.recvfrom(1024)
-    data = data.decode('utf-8')
+    client_msg, client_address = server_socket.recvfrom(1024)
+    client_msg = client_msg.decode('utf-8')
 
-    if client_address not in client_info:
-        client_info[client_address] = data
-        print(f"'{data}' is now connected from {client_address}")
-        welcome_message = f"Server: Welcome {data}."
-        for addr in client_info:
-            server_socket.sendto(welcome_message.encode('utf-8'), addr)
+    if client_address not in client_dict:
+        client_dict[client_address] = client_msg
+        print(f"'{client_msg}' has joined the chat")
+        welcome_msg = f"{client_msg} joined the chat."
+        for addr in client_dict:
+            server_socket.sendto(welcome_msg.encode('utf-8'), addr)
     else:
-        broadcast(data, client_info[client_address])
+        broadcast_msg(client_msg, client_dict[client_address])
