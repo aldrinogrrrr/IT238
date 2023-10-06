@@ -21,8 +21,5 @@ while True:
     if client_address not in client_info:
         client_info[client_address] = data
         print(f"'{data}' is now connected from {client_address}")
-        welcome_message = f"Server: Welcome {data}."
-        for addr in client_info:
-            server_socket.sendto(welcome_message.encode('utf-8'), addr)
     else:
         broadcast(data, client_info[client_address])
