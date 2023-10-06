@@ -1,8 +1,8 @@
 import socket
 import threading
 
-# Server settings
-server_ip = "YOUR_SERVER_IP"
+
+server_ip = "192.168.1.35"
 server_port = 12345
 
 
@@ -23,5 +23,5 @@ receive_thread.start()
 
 
 while True:
-    message = input()
+    message = input("Enter your message: ")
     client_socket.sendto(message.encode('utf-8'), (server_ip, server_port))
