@@ -1,6 +1,7 @@
 import socket
 import threading
 
+#updated
 server_ip = "192.168.1.35"
 server_port = 12345
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
