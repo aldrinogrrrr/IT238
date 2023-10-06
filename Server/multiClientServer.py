@@ -19,7 +19,12 @@ while True:
     data = data.decode('utf-8')
 
     if client_address not in client_info:
-        client_info[client_address] = data
-        print(f"'{data}' is now connected from {client_address}")
+        client_name = data
+
+        welcome_message = f"Server: Welcome {client_name}."
+        server_socket.sendto(welcome_message.encode('utf-8'), client_address)
+
+        client_info[client_address] = client_name
+        print(f"'{client_name}' is now connected from {client_address}")
     else:
         broadcast(data, client_info[client_address])
