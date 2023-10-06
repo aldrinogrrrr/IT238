@@ -1,21 +1,23 @@
 import socket
 import threading
 
-server_ip = "192.168.1.35"
-server_port = 12345
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+serverIp = "192.168.1.35"
+serverPort = 12345
+clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 userName = input("Enter your name: ")
-client_socket.sendto(userName.encode('utf-8'), (server_ip, server_port))
+clientSocket.sendto(userName.encode('utf-8'), (serverIp, serverPort))
 
-def receive_messages():
+
+def receiveMessages():
     while True:
-        msg, _ = client_socket.recvfrom(1024)
+        msg, _ = clientSocket.recvfrom(1024)
         print(msg.decode('utf-8'))
 
-receive_thread = threading.Thread(target=receive_messages)
-receive_thread.start()
+
+thread = threading.Thread(target=receiveMessages)
+thread.start()
 
 while True:
-    user_msg = input()
-    client_socket.sendto(user_msg.encode('utf-8'), (server_ip, server_port))
+    userMessage = input()
+    clientSocket.sendto(userMessage.encode('utf-8'), (serverIp, serverPort))
