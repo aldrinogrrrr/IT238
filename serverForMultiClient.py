@@ -1,18 +1,14 @@
 import socket
 import threading
 
-
-server_ip = "YOUR_SERVER_IP"
+server_ip = "192.168.1.35"
 server_port = 12345
-
-
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_socket.bind((server_ip, server_port))
 
-
 client_info = {}
 
-print("Server is running...")
+print("The server is operational...")
 
 def broadcast(message, sender_name):
     chat_message = f"{sender_name}: {message}"
