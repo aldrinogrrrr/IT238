@@ -2,27 +2,27 @@ import socket
 
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_ip = '192.168.1.35'
-server_port = 9999
+serverIp = '192.168.1.35'
+serverPort = 9999
 
 
 try:
-    client.connect((server_ip, server_port))
-    print(f"Connected to the server at {server_ip}:{server_port}")
+    client.connect((serverIp, serverPort))
+    print(f"Connected to the server at {serverIp}:{serverPort}")
 
     while True:
-        message = input("Enter your message: ")
+        userMessage = input("Enter your message: ")
 
-        client.send(message.encode('utf-8'))
+        client.send(userMessage.encode('utf-8'))
 
-        if message.lower() == 'exit':
+        if userMessage.lower() == 'exit':
             break
 
         response = client.recv(1024).decode('utf-8')
         print(f"Server's Message: {response}")
 
 except ConnectionRefusedError:
-    print(f"Connection to {server_ip}:{server_port} was refused. Make sure the server is running.")
+    print(f"Connection to {serverIp}:{serverPort} was refused. Make sure the server is running.")
 except Exception as e:
     print(f"An error occurred: {e}")
 

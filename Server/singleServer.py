@@ -2,39 +2,39 @@ import socket
 import threading
 
 
-def handle_client(client_socket):
+def handle_client(clientSocket):
     while True:
         try:
 
-            data = client_socket.recv(1024).decode('utf-8')
+            data = clientSocket.recv(1024).decode('utf-8')
             if not data:
                 break
 
             print(f"Client's Message: {data}")
 
             response = input("Enter your message: ")
-            client_socket.send(response.encode('utf-8'))
+            clientSocket.send(response.encode('utf-8'))
         except ConnectionResetError:
             print("Client disconnected.")
             break
 
-    client_socket.close()
+    clientSocket.close()
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(('0.0.0.0', 9999))  
 server.listen(5) 
 
-print("Server listening on port 9999")
+print("Server listening...")
 
 
 while True:
     try:
-        client_sock, addr = server.accept()
+        clientSock, addr = server.accept()
         print(f"Accepted connection from {addr[0]}:{addr[1]}")
 
-        client_handler = threading.Thread(target=handle_client, args=(client_sock,))
-        client_handler.start()
+        clientHandler = threading.Thread(target=handle_client, args=(clientSock,))
+        clientHandler.start()
     except KeyboardInterrupt:
         print("Server terminated by the user.")
         break
