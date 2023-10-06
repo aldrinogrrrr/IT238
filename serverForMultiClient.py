@@ -12,8 +12,7 @@ print("The server is operational...")
 def broadcast(message, sender_name):
     chat_message = f"{sender_name}: {message}"
     for addr in client_info:
-        if addr != sender_name:
-            server_socket.sendto(chat_message.encode('utf-8'), addr)
+        server_socket.sendto(chat_message.encode('utf-8'), addr)
 
 while True:
     data, client_address = server_socket.recvfrom(1024)
@@ -23,6 +22,7 @@ while True:
         client_info[client_address] = data
         print(f"'{data}' is now connected from {client_address}")
         welcome_message = f"Server: Welcome {data}."
-        server_socket.sendto(welcome_message.encode('utf-8'), client_address)
+        for addr in client_info:
+            server_socket.sendto(welcome_message.encode('utf-8'), addr)
     else:
         broadcast(data, client_info[client_address])
