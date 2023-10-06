@@ -1,7 +1,6 @@
 import socket
 import threading
 
-#updated
 server_ip = "192.168.1.35"
 server_port = 12345
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -20,12 +19,10 @@ while True:
     data = data.decode('utf-8')
 
     if client_address not in client_info:
-        client_name = data
-
-        welcome_message = f"Server: Welcome {client_name}."
-        server_socket.sendto(welcome_message.encode('utf-8'), client_address)
-
-        client_info[client_address] = client_name
-        print(f"'{client_name}' is now connected from {client_address}")
+        client_info[client_address] = data
+        print(f"'{data}' is now connected from {client_address}")
+        welcome_message = f"Server: Welcome {data}."
+        for addr in client_info:
+            server_socket.sendto(welcome_message.encode('utf-8'), addr)
     else:
         broadcast(data, client_info[client_address])
