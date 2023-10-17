@@ -30,40 +30,34 @@ while True:
         broadcast_msg(clientName, clientList[clientAddress])
 
 
-# Initialize Pyro5 Server
+# Initialize Pyro5 Client
 Pyro5.config.SERVERTYPE = "thread"
 Pyro5.config.THREADPOOL_SIZE = 20
-daemon = Pyro5.api.Daemon(host="localhost")
-ns = Pyro5.api.locate_ns()
+with Pyro5.api.Proxy("PYRONAME:chatserver") as chat_server:
+    client_name = input("Enter your name: ")
+    clientSocket.sendto(client_name.encode('utf-8'), (server_ip, server_port)
 
-# Register the server as a Pyro5 object
-@Pyro5.api.expose
-class ChatServer:
-    def __init__(self):
-        self.clientList = {}
+    def receive_messages():
+        while True:
+            message, _ = clientSocket.recvfrom(1024)
+            print(message.decode('utf-8'))
 
-    def register_client(self, name, address):
-        self.clientList[address] = name
-        print(f"'{name}' has joined the chat")
-        welcome_message = f"{name} joined the chat."
-        for addr in self.clientList:
-            chatClient = Pyro5.api.Proxy(f"PYRONAME:chatclient.{addr}")
-            chatClient.receive_message(welcome_message.encode('utf-8').decode('utf-8'))
-            chatClient.register_user(name, address)
+    def handle_private_chat(target_name):
+        while True:
+            user_message = input()
+            chat_server.send_message(client_name, f"(Private) {target_name}: {user_message}")
 
-    def send_message(self, sender, message):
-        chatMessage = f"{sender}: {message}"
-        for client_address in self.clientList:
-            chatClient = Pyro5.api.Proxy(f"PYRONAME:chatclient.{client_address}")
-            chatClient.receive_message(chatMessage)
+    receive_thread = threading.Thread(target=receive_messages)
+    receive_thread.start()
 
-# ... (remaining server code)
-
-# Register the server with Pyro5
-serverUri = daemon.register(ChatServer)
-ns.register("chatserver", serverUri)
-
-print("Server is up and running...")
-
-# Start the Pyro5 server
-daemon.requestLoop()
+    while True:
+        user_message = input()
+        if user_message.startswith("/invite"):
+            target_name = user_message.split(' ')[1]
+            if target_name in chat_server.clientList.values():
+                print(f"Inviting {target_name} to a private chat...")
+                chat_server.send_invitation(client_name, target_name)
+            else:
+                print(f"{target_name} is not online or not registered for private chat.")
+        else:
+            clientSocket.sendto(user_message.encode('utf-8'), (server_ip, server_port))

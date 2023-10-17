@@ -23,6 +23,8 @@ thread.start()
 while True:
     userMessage = input()
     clientSocket.sendto(userMessage.encode('utf-8'), (serverIp, serverPort))
+
+
 # Initialize Pyro5 Client
 Pyro5.config.SERVERTYPE = "thread"
 Pyro5.config.THREADPOOL_SIZE = 20
