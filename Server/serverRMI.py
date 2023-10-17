@@ -2,7 +2,7 @@ import socket
 import threading
 import Pyro5.api
 
-# ... (previous code)
+
 serverIp = "192.168.1.35"
 serverPort = 12345
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -31,7 +31,7 @@ while True:
 
 
 
-# Initialize Pyro5 Client
+
 Pyro5.config.SERVERTYPE = "thread"
 Pyro5.config.THREADPOOL_SIZE = 20
 with Pyro5.api.Proxy("PYRONAME:chatserver") as chat_server:
@@ -53,7 +53,7 @@ with Pyro5.api.Proxy("PYRONAME:chatserver") as chat_server:
 
     while True:
         user_message = input()
-        if user_message.startswith("/invite"):
+        if user_message.startswith("/inviteuser"):
             target_name = user_message.split(' ')[1]
             if target_name in chat_server.clientList.values():
                 print(f"Inviting {target_name} to a private chat...")

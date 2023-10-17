@@ -2,7 +2,7 @@ import socket
 import threading
 import Pyro5.api
 
-# ... (previous code)
+
 serverIp = "192.168.1.35"
 serverPort = 12345
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -10,7 +10,7 @@ clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 userName = input("Enter your name: ")
 clientSocket.sendto(userName.encode('utf-8'), (serverIp, serverPort))
 
-# Initialize Pyro5 Client
+
 Pyro5.config.SERVERTYPE = "thread"
 Pyro5.config.THREADPOOL_SIZE = 20
 with Pyro5.api.Proxy("PYRONAME:chatserver") as chat_server:
@@ -29,7 +29,7 @@ with Pyro5.api.Proxy("PYRONAME:chatserver") as chat_server:
 
     while True:
         userMessage = input()
-        if userMessage.startswith("/invite"):
+        if userMessage.startswith("/inviteuser"):
             targetName = userMessage.split(' ')[1]
             if targetName in chat_server.clientList.values():
                 private_chat_thread = threading.Thread(target=handle_private_chat, args=(targetName,))
