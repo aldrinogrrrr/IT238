@@ -21,21 +21,21 @@ class ChatServer:
         print(f"'{name}' has joined the chat")
         welcome_message = f"{name} joined the chat."
         for addr in self.clientList:
-            chat_client = Pyro5.api.Proxy(f"PYRONAME:chatclient.{addr}")
-            chat_client.receive_message(welcome_message.encode('utf-8').decode('utf-8'))
-            chat_client.register_user(name, address)
+            chatClient = Pyro5.api.Proxy(f"PYRONAME:chatclient.{addr}")
+            chatClient.receive_message(welcome_message.encode('utf-8').decode('utf-8'))
+            chatClient.register_user(name, address)
 
     def send_message(self, sender, message):
-        chat_message = f"{sender}: {message}"
+        chatMessage = f"{sender}: {message}"
         for client_address in self.clientList:
-            chat_client = Pyro5.api.Proxy(f"PYRONAME:chatclient.{client_address}")
-            chat_client.receive_message(chat_message)
+            chatClient = Pyro5.api.Proxy(f"PYRONAME:chatclient.{client_address}")
+            chatClient.receive_message(chatMessage)
 
 # ... (remaining server code)
 
 # Register the server with Pyro5
-server_uri = daemon.register(ChatServer)
-ns.register("chatserver", server_uri)
+serverUri = daemon.register(ChatServer)
+ns.register("chatserver", serverUri)
 
 print("Server is up and running...")
 
