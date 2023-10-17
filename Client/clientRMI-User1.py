@@ -10,37 +10,19 @@ clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 userName = input("Enter your name: ")
 clientSocket.sendto(userName.encode('utf-8'), (serverIp, serverPort))
 
-
-def receiveMessages():
-    while True:
-        msg, _ = clientSocket.recvfrom(1024)
-        print(msg.decode('utf-8'))
-
-
-thread = threading.Thread(target=receiveMessages)
-thread.start()
-
-while True:
-    userMessage = input()
-    clientSocket.sendto(userMessage.encode('utf-8'), (serverIp, serverPort))
-
-
 # Initialize Pyro5 Client
 Pyro5.config.SERVERTYPE = "thread"
 Pyro5.config.THREADPOOL_SIZE = 20
 with Pyro5.api.Proxy("PYRONAME:chatserver") as chat_server:
-    clientName = input("Enter your name: ")
-    clientSocket.sendto(clientName.encode('utf-8'), (serverIp, serverPort))
-
     def receive_messages():
         while True:
-            message, _ = clientSocket.recvfrom(1024)
-            print(message.decode('utf-8'))
+            msg, _ = clientSocket.recvfrom(1024)
+            print(msg.decode('utf-8'))
 
     def handle_private_chat(targetName):
         while True:
             userMessage = input()
-            chat_server.send_message(clientName, f"(Private) {targetName}: {userMessage}")
+            chat_server.send_message(userName, f"(Private) {targetName}: {userMessage}")
 
     receive_thread = threading.Thread(target=receive_messages)
     receive_thread.start()
