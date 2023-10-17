@@ -35,7 +35,7 @@ Pyro5.config.SERVERTYPE = "thread"
 Pyro5.config.THREADPOOL_SIZE = 20
 with Pyro5.api.Proxy("PYRONAME:chatserver") as chat_server:
     client_name = input("Enter your name: ")
-    clientSocket.sendto(client_name.encode('utf-8'), (server_ip, server_port)
+    clientSocket.sendto(client_name.encode('utf-8'), (server_ip, server_port))
 
     def receive_messages():
         while True:
