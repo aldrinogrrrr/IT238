@@ -13,7 +13,7 @@ print("Server is up and running...")
 
 def broadcast_msg(msg, sender):
     chat_msg = f"{sender}: {msg}"
-    for clientAddress in clientList:  # Changed the variable name for clarity
+    for clientAddress in clientList:
         serverSocket.sendto(chat_msg.encode('utf-8'), clientAddress)
 
 while True:
