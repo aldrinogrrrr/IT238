@@ -2,13 +2,27 @@ import socket
 import threading
 import Pyro5.api
 
-serverIp = "localhost"  # Update to the Pyro5 server's IP address
+# ... (previous code)
+serverIp = "192.168.1.35"
 serverPort = 12345
-
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# ... (previous code)
+userName = input("Enter your name: ")
+clientSocket.sendto(userName.encode('utf-8'), (serverIp, serverPort))
 
+
+def receiveMessages():
+    while True:
+        msg, _ = clientSocket.recvfrom(1024)
+        print(msg.decode('utf-8'))
+
+
+thread = threading.Thread(target=receiveMessages)
+thread.start()
+
+while True:
+    userMessage = input()
+    clientSocket.sendto(userMessage.encode('utf-8'), (serverIp, serverPort))
 # Initialize Pyro5 Client
 Pyro5.config.SERVERTYPE = "thread"
 Pyro5.config.THREADPOOL_SIZE = 20
