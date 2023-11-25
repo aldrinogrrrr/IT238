@@ -21,7 +21,7 @@ def broadcast_msg(msg, sender):
         serverSocket.sendto(chat_msg.encode('utf-8'), clientLocation)
 
 # Functions handle_auction_request, handle_bid, auction_winner...
-# (These functions are defined as per the provided context in the original code)
+
 
 class AuctionServer(BanyanBase):
     def __init__(self):
