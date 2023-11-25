@@ -3,9 +3,11 @@ import threading
 import time
 import sys
 
+
 class BanyanBase:
     def __init__(self, process_name):
         self.process_name = process_name
+
 
 serverIp = "192.168.1.35"
 serverPort = 12345
@@ -18,10 +20,16 @@ auction_end_time = {}
 
 print("Server is up and running...")
 
+
 def broadcast_msg(msg, sender):
     chat_msg = f"{sender}: {msg}"
     for clientLocation in clientList:
         serverSocket.sendto(chat_msg.encode('utf-8'), clientLocation)
+
+
+def auction_winner(itemName):
+    pass
+
 
 def check_auction_end_time():
     while True:
@@ -29,6 +37,15 @@ def check_auction_end_time():
             if time.time() > auction_end_time[itemName]:
                 auction_winner(itemName)
         time.sleep(1)
+
+
+def handle_auction_request(clientName, param):
+    pass
+
+
+def handle_bid(clientName, param):
+    pass
+
 
 class AuctionServer(BanyanBase):
     def __init__(self):
@@ -76,10 +93,15 @@ class AuctionServer(BanyanBase):
         elif action == "END_AUCTION":
             auction_winner(params[0])
 
-# Functions handle_auction_request, handle_bid, auction_winner...
-# (These functions need to be defined based on the updated requirements)
+    def receive_loop(self):
+        pass
 
-# ...
+    def clean_up(self):
+        pass
+
+    def set_subscriber_topic(self, param):
+        pass
+
 
 auction_server = AuctionServer()
 
