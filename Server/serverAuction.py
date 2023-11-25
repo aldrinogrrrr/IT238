@@ -25,28 +25,18 @@ def broadcast_msg(msg, sender):
     chat_msg = f"{sender}: {msg}"
     for clientLocation in clientList:
         serverSocket.sendto(chat_msg.encode('utf-8'), clientLocation)
-
-
 def auction_winner(itemName):
     pass
-
-
 def check_auction_end_time():
     while True:
         for itemName in list(auction_items.keys()):
             if time.time() > auction_end_time[itemName]:
                 auction_winner(itemName)
         time.sleep(1)
-
-
 def handle_auction_request(clientName, param):
     pass
-
-
 def handle_bid(clientName, param):
     pass
-
-
 class AuctionServer(BanyanBase):
     def __init__(self):
         super(AuctionServer, self).__init__(process_name='AuctionServer')
@@ -95,13 +85,10 @@ class AuctionServer(BanyanBase):
 
     def receive_loop(self):
         pass
-
     def clean_up(self):
         pass
-
     def set_subscriber_topic(self, param):
         pass
-
 
 auction_server = AuctionServer()
 

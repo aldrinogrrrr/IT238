@@ -37,7 +37,7 @@ class AuctionClient(BanyanBase):
 auction_client = AuctionClient(userName)
 
 while True:
-    print("Pick your action: Sell <item_name> <starting_bid> <duration>, Bid <item_name> <bid_amount>, End <item_name>")
+    print("Pick your action: Sell, Bid, End")
     option = input("Enter your desired action: ")
     option_parts = option.split()
 
