@@ -2,6 +2,8 @@ import socket
 import threading
 import time
 
+from python_banyan.banyan_base import BanyanBase
+
 serverIp = "192.168.1.35"
 serverPort = 12345
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -17,8 +19,27 @@ def receiveMessages():
 thread = threading.Thread(target=receiveMessages)
 thread.start()
 
+class AuctionClient(BanyanBase):
+    def __init__(self, userName):
+        super(AuctionClient, self).__init__(process_name=userName)
+        self.set_publisher_topic('auction')
+
+    def send_message(self, action, params):
+        message = {'clientName': self.process_name, 'action': action, 'params': params}
+        self.publish_payload(message, 'auction')
+
+auction_client = AuctionClient(userName)
+
 while True:
-    print("Options: SELL <item_name> <starting_bid>, BID <item_name> <bid_amount>, END_AUCTION <item_name>")
-    userAction = input("Enter action: ")
-    clientSocket.sendto(f"{userName}:{userAction}".encode('utf-8'), (serverIp, serverPort))
-    time.sleep(1)  # Adjust this delay as needed for better user interaction
+    print("Options: SELL <item_name> <starting_bid> <duration>, BID <item_name> <bid_amount>, END_AUCTION <item_name>")
+    option = input("Enter your option: ")
+    option_parts = option.split()
+
+    if len(option_parts) >= 2:
+        action = option_parts[0]
+        params = option_parts[1:]
+
+        if action == "SELL" or action == "BID" or action == "END_AUCTION":
+            auction_client.send_message(action, params)
+        else:
+            print("Invalid action. Please try again.")
