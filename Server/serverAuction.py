@@ -69,16 +69,16 @@ class AuctionServer(BanyanBase):
 
                 if clientAddress not in clientList:
                     clientList[clientAddress] = clientName
-                    print(f"'{clientName}' has joined the auction")
-                    welcomeMessage = f"{clientName} joined the auction."
+                    print(f"'{clientName}' has joined the auction platform")
+                    welcomeMessage = f"{clientName} joined the auction platform."
                     for addr in clientList:
                         serverSocket.sendto(welcomeMessage.encode('utf-8'), addr)
 
-                if action == "SELL":
+                if action == "Sell":
                     handle_auction_request(clientName, *params)
-                elif action == "BID":
+                elif action == "Bid":
                     handle_bid(clientName, *params)
-                elif action == "END_AUCTION":
+                elif action == "End":
                     auction_winner(params[0])
 
     def incoming_message_processing(self, topic, payload):
@@ -86,11 +86,11 @@ class AuctionServer(BanyanBase):
         action = payload['action']
         params = payload['params']
 
-        if action == "SELL":
+        if action == "Sell":
             handle_auction_request(clientName, *params)
-        elif action == "BID":
+        elif action == "Bid":
             handle_bid(clientName, *params)
-        elif action == "END_AUCTION":
+        elif action == "End":
             auction_winner(params[0])
 
     def receive_loop(self):
