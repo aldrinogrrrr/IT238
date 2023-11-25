@@ -1,8 +1,11 @@
 import socket
 import threading
 import time
+import sys
 
-from python_banyan.banyan_base import BanyanBase
+class BanyanBase:
+    def __init__(self, process_name):
+        self.process_name = process_name
 
 serverIp = "192.168.1.35"
 serverPort = 12345
@@ -20,8 +23,12 @@ def broadcast_msg(msg, sender):
     for clientLocation in clientList:
         serverSocket.sendto(chat_msg.encode('utf-8'), clientLocation)
 
-# Functions handle_auction_request, handle_bid, auction_winner...
-
+def check_auction_end_time():
+    while True:
+        for itemName in list(auction_items.keys()):
+            if time.time() > auction_end_time[itemName]:
+                auction_winner(itemName)
+        time.sleep(1)
 
 class AuctionServer(BanyanBase):
     def __init__(self):
@@ -29,7 +36,7 @@ class AuctionServer(BanyanBase):
         self.set_subscriber_topic('auction')
         self.udp_thread = threading.Thread(target=self.handle_udp_messages)
         self.udp_thread.start()
-        self.timer_thread = threading.Thread(target=self.check_auction_end_time)
+        self.timer_thread = threading.Thread(target=check_auction_end_time)
         self.timer_thread.start()
 
     def handle_udp_messages(self):
@@ -50,19 +57,29 @@ class AuctionServer(BanyanBase):
                     for addr in clientList:
                         serverSocket.sendto(welcomeMessage.encode('utf-8'), addr)
 
-                # Handling actions - SELL, BID, END_AUCTION...
-                # (Refer to the provided context in the original code for action handling)
-
-    # Function check_auction_end_time...
-    # (The function to check auction end times and declare winners as provided in the original context)
+                if action == "SELL":
+                    handle_auction_request(clientName, *params)
+                elif action == "BID":
+                    handle_bid(clientName, *params)
+                elif action == "END_AUCTION":
+                    auction_winner(params[0])
 
     def incoming_message_processing(self, topic, payload):
         clientName = payload['clientName']
         action = payload['action']
         params = payload['params']
 
-        # Handling actions - SELL, BID, END_AUCTION...
-        # (Refer to the provided context in the original code for action handling)
+        if action == "SELL":
+            handle_auction_request(clientName, *params)
+        elif action == "BID":
+            handle_bid(clientName, *params)
+        elif action == "END_AUCTION":
+            auction_winner(params[0])
+
+# Functions handle_auction_request, handle_bid, auction_winner...
+# (These functions need to be defined based on the updated requirements)
+
+# ...
 
 auction_server = AuctionServer()
 

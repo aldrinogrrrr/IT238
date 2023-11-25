@@ -1,8 +1,11 @@
 import socket
 import threading
 import time
+import sys
 
-from python_banyan.banyan_base import BanyanBase
+class BanyanBase:
+    def __init__(self, process_name):
+        self.process_name = process_name
 
 serverIp = "192.168.1.35"
 serverPort = 12345
